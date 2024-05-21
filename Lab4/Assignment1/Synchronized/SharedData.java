@@ -1,13 +1,13 @@
-package Assignment1;
+package Assignment1.Synchronized;
 
-public class ShareDataSync {
+public class SharedData {
     private int sharedVariable = 0;
 
-    public synchronized void incrementSynchronized() {
+    public synchronized void increment() {
         sharedVariable++;
     }
 
-    public synchronized void decrementSynchronized() {
+    public synchronized void decrement() {
         sharedVariable--;
     }
 

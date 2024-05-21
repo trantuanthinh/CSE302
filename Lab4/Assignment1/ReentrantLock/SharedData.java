@@ -1,28 +1,27 @@
-package Assignment1;
+package Assignment1.ReentrantLock;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SharedDataLock {
+public class SharedData {
     private int sharedVariable = 0;
-    private final Lock reentrantLock = new ReentrantLock();
+    private Lock lock = new ReentrantLock();
 
-    // Using ReentrantLock class
-    public void incrementWithLock() {
-        reentrantLock.lock();
+    public void increment() {
+        lock.lock();
         try {
             sharedVariable++;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 
-    public void decrementWithLock() {
-        reentrantLock.lock();
+    public void decrement() {
+        lock.lock();
         try {
             sharedVariable--;
         } finally {
-            reentrantLock.unlock();
+            lock.unlock();
         }
     }
 

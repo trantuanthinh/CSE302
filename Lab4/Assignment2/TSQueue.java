@@ -7,26 +7,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TSQueue {
-    private final Queue<Integer> queue;
-    private final Lock lock;
-    private final Condition notEmpty;
-    private final Condition notFull;
-    private final int capacity;
+    private final Queue<Integer> queue = new LinkedList<>();
+    private final Lock lock = new ReentrantLock();
+    private final Condition notEmpty = lock.newCondition();
 
-    public TSQueue(int capacity) {
-        this.queue = new LinkedList<>();
-        this.lock = new ReentrantLock();
-        this.notEmpty = lock.newCondition();
-        this.notFull = lock.newCondition();
-        this.capacity = capacity;
-    }
-
-    public void addLast(int value) throws InterruptedException {
+    public void addLast(int value) {
         lock.lock();
         try {
-            while (queue.size() == capacity) {
-                notFull.await();
-            }
             queue.add(value);
             notEmpty.signal();
         } finally {
@@ -40,11 +27,13 @@ public class TSQueue {
             while (queue.isEmpty()) {
                 notEmpty.await();
             }
-            int value = queue.remove();
-            notFull.signal();
-            return value;
+            return queue.remove();
         } finally {
             lock.unlock();
         }
+    }
+
+    public Queue<Integer> getQueue() {
+        return this.queue;
     }
 }
