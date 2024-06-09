@@ -1,40 +1,18 @@
-package Assignment1;
+package Lab5.Assignment1;
 
 public class Main {
+
     public static void main(String[] args) {
-        WaterMonitor monitor = new WaterMonitor();
+        Philosopher[] philosophers = new Philosopher[5];
+        Fork[] forks = new Fork[5];
 
-        Runnable hydrogenTask = () -> {
-            try {
-                System.out.println(Thread.currentThread().getName() + " Hydrogen thread ...");
-                monitor.hydrogen();
-                System.out.println(Thread.currentThread().getName() + " Hydrogen thread completed.");
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        };
-
-        Runnable oxygenTask = () -> {
-            try {
-                System.out.println(Thread.currentThread().getName() + " Oxygen thread ...");
-                monitor.oxygen();
-                System.out.println(Thread.currentThread().getName() + " Oxygen thread completed.");
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        };
-
-        Thread[] threads = new Thread[6];
-        for (int i = 0; i < 4; i++) {
-            threads[i] = new Thread(hydrogenTask, "H" + (i + 1));
-        }
-        for (int i = 4; i < 6; i++) {
-            threads[i] = new Thread(oxygenTask, "O" + (i - 3));
+        for (int i = 0; i < forks.length; i++) {
+            forks[i] = new Fork(i);
         }
 
-        for (Thread t : threads) {
-            t.start();
+        for (int i = 0; i < philosophers.length; i++) {
+            philosophers[i] = new Philosopher(i, forks[i], forks[(i + 1) % forks.length]);
+            new Thread(philosophers[i]).start();
         }
-        System.out.println("Water: " + monitor.getWater());
     }
 }
